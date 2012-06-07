@@ -43,14 +43,20 @@ app.User = User = require('./models.js').User(db);
 
 // Routes			
 
-var user = new User({name: 'something', email: 'a@b.com'});
-user.save();
-		
 app.get('/', routes.index);
-
 app.get('/join', routes.join);
 
 app.get('/users', function(req, res){
+  User.find({}, function(err, users) {
+	res.render('users/index.jade', {
+		locals: { users: users }
+    });
+  });
+});
+
+app.post('/join', function(req, res){
+  var user = new User({name: req.param('name', null), email: req.param('email', null) });
+  user.save();
   User.find({}, function(err, users) {
 	res.render('users/index.jade', {
 		locals: { users: users }
