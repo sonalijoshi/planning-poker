@@ -16,6 +16,10 @@ exports.startVote = function(req, res){
   res.render('users/start-vote.jade', { title: 'Start Vote' })
 };
 
+exports.addVote = function(req, res){
+  res.render('users/add-vote.jade', { title: 'Add Vote' })
+};
+
 /*
  * GET users page.
  

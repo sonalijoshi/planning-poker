@@ -1,0 +1,10 @@
+html
+	head
+		script(src='/socket.io/socket.io.js')
+		script(src='/javascripts/socket.js')
+	body
+		div#addVote
+			form(action='/add-vote', method='post') 
+				label Vote:
+				input(type='text', name='vote') 
+				input(type='submit')

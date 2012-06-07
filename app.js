@@ -20,12 +20,6 @@ app.configure(function(){
   app.use(express.static(__dirname + '/public'));
 });
 
-/*models.defineModels(mongoose, function() {
-//  app.User = User = mongoose.model('User');
-  db = mongoose.connect('mongodb://localhost/planningpoker');
-}) */
-
-
 app.configure('development', function(){
   app.use(express.logger());
   app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
@@ -53,24 +47,26 @@ app.get('/users', function(req, res){
   });
 });
 
+
 app.post('/join', function(req, res){
   var user = new User({name: req.param('name', null), email: req.param('email', null) });
   user.save();
-  res.redirect('/start-vote');
+  res.redirect('/add-vote');
 });
 
 app.get('/start-vote', routes.startVote);
 
+app.get('/add-vote', routes.addVote);
+
 app.post('/start-vote', function(req, res){
-  socket.broadcast.emit('gameStarted');
-  res.redirect('/users');
+	res.render('vote-started.jade');
 });
 
-/*
 io.sockets.on('connection', function (socket) {
-  socket.broadcast.emit('gameStarted', { hello: 'world' });
+  socket.on('voteStarted', function() {
+	socket.broadcast.emit('gameStarted', { hello: 'world' });
+  });
 });
-*/
 
 app.listen(3001, function(){
   console.log("Express server listening on port %d in %s mode", app.address().port, app.settings.env);
