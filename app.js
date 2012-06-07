@@ -57,11 +57,7 @@ app.get('/users', function(req, res){
 app.post('/join', function(req, res){
   var user = new User({name: req.param('name', null), email: req.param('email', null) });
   user.save();
-  User.find({}, function(err, users) {
-	res.render('users/index.jade', {
-		locals: { users: users }
-    });
-  });
+  res.redirect('/users');
 });
 
 app.listen(3001, function(){
