@@ -1,16 +1,15 @@
-
 /**
  * Module dependencies.
  */
 
 var express = require('express')
-  , app = module.exports = express.createServer()
   , routes = require('./routes')
   , mongoose = require('mongoose')
   , db
   , User;
  
 // Configuration
+app = module.exports = express.createServer();
 
 app.configure(function(){
   app.set('views', __dirname + '/views');
@@ -48,6 +47,8 @@ var user = new User({name: 'something', email: 'a@b.com'});
 user.save();
 		
 app.get('/', routes.index);
+
+app.get('/join', routes.join);
 
 app.get('/users', function(req, res){
   User.find({}, function(err, users) {

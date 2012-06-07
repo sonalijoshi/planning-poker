@@ -5,7 +5,11 @@ require('../models.js');
  */
 
 exports.index = function(req, res){
-  res.render('index', { title: 'Express' })
+  res.render('index', { title: 'Planning Poker' })
+};
+
+exports.join = function(req, res){
+  res.render('users/join.jade', { title: 'Join' })
 };
 
 /*
