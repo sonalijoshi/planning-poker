@@ -12,6 +12,10 @@ exports.join = function(req, res){
   res.render('users/join.jade', { title: 'Join' })
 };
 
+exports.startVote = function(req, res){
+  res.render('users/start-vote.jade', { title: 'Start Vote' })
+};
+
 /*
  * GET users page.
  
