@@ -4,10 +4,12 @@
  */
 
 var express = require('express')
-  , routes = require('./routes');
-
-var app = module.exports = express.createServer();
-
+  , app = module.exports = express.createServer()
+  , routes = require('./routes')
+  , mongoose = require('mongoose')
+  , db
+  , User;
+ 
 // Configuration
 
 app.configure(function(){
@@ -20,18 +22,41 @@ app.configure(function(){
   app.use(express.static(__dirname + '/public'));
 });
 
+/*models.defineModels(mongoose, function() {
+//  app.User = User = mongoose.model('User');
+  db = mongoose.connect('mongodb://localhost/planningpoker');
+}) */
+
+
 app.configure('development', function(){
+  app.use(express.logger());
   app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
+  db = mongoose.connect('mongodb://localhost/planningpoker-development');
 });
 
 app.configure('production', function(){
+  app.use(express.logger());
   app.use(express.errorHandler());
+  db = mongoose.connect('mongodb://localhost/planningpoker-production');
 });
 
-// Routes
+app.User = User = require('./models.js').User(db);
 
+// Routes			
+
+var user = new User({name: 'something', email: 'a@b.com'});
+user.save();
+		
 app.get('/', routes.index);
 
-app.listen(3000, function(){
+app.get('/users', function(req, res){
+  User.find({}, function(err, users) {
+	res.render('users/index.jade', {
+		locals: { users: users }
+    });
+  });
+});
+
+app.listen(3001, function(){
   console.log("Express server listening on port %d in %s mode", app.address().port, app.settings.env);
 });
