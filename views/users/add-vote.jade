@@ -7,4 +7,5 @@ html
 			form(action='/add-vote', method='post') 
 				label Vote:
 				input(type='text', name='vote') 
+				input(type='hidden', name='userId', value=userId) 
 				input(type='submit')

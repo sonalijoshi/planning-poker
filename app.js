@@ -1,7 +1,3 @@
-/**
- * Module dependencies.
- */
-
 var express = require('express')
   , app = module.exports = express.createServer()
   , routes = require('./routes')
@@ -34,8 +30,7 @@ app.configure('production', function(){
 
 app.User = User = require('./models.js').User(db);
 
-// Routes			
-
+// Routes
 app.get('/', routes.index);
 app.get('/join', routes.join);
 
@@ -51,17 +46,26 @@ app.get('/users', function(req, res){
 app.post('/join', function(req, res){
   var user = new User({name: req.param('name', null), email: req.param('email', null) });
   user.save();
-  res.redirect('/add-vote');
+  res.render('users/add-vote.jade', {locals: {userId: user._id}} );
 });
 
 app.get('/start-vote', routes.startVote);
 
 app.get('/add-vote', routes.addVote);
+var usersVotes = {};
+
+app.post('/add-vote', function(req, res) {
+	usersVotes[req.param('userId', null)] = req.param('vote', null);
+	console.log(io.sockets.clients().length);
+	if (io.sockets.clients().length == Object.keys(usersVotes).length) {
+		res.render('results.jade', {locals: { usersVotes: usersVotes}});
+	}
+	res.render('voting-in-progress.jade');
+});
 
 app.post('/start-vote', function(req, res){
 	res.render('vote-started.jade');
 });
-
 io.sockets.on('connection', function (socket) {
   socket.on('voteStarted', function() {
 	socket.broadcast.emit('gameStarted', { hello: 'world' });
