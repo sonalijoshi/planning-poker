@@ -3,6 +3,8 @@ html
 		script(src='/socket.io/socket.io.js')
 		script(src='/javascripts/socket.js')
 	body
+		div#userJoined
+			h1 You have joined this game. Please wait for the voting to begin.
 		div#addVote
 			form(action='/add-vote', method='post') 
 				label Vote:  

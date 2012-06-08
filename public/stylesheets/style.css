@@ -6,10 +6,14 @@ a {
   color: #00b7ff;
 }
 #addVote {
-  visibility: hidden;
+  display: none;
+}
+#finalVotes {
+  padding: 0 0 0 1em;
+  font: 25px/1.4 Calibri, Helvetica, Arial, sans-serif;
 }
 .topBar {
-  padding: 0 0 3.5em 0;
+  padding: 0 0 2em 0;
 }
 li {
   list-style-type: none;
