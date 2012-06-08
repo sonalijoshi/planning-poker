@@ -16,6 +16,10 @@ app.configure(function(){
   app.use(express.static(__dirname + '/public'));
 });
 
+io.configure(function(){
+	io.set('log level', 2);
+});
+
 app.configure('development', function(){
   app.use(express.logger());
   app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
@@ -42,10 +46,11 @@ app.get('/users', function(req, res){
   });
 });
 
-
+var count = 0;
 app.post('/join', function(req, res){
   var user = new User({name: req.param('name', null), email: req.param('email', null) });
   user.save();
+  count = count + 1;
   res.render('users/add-vote.jade', {locals: {userId: user._id}} );
 });
 
@@ -56,19 +61,23 @@ var usersVotes = {};
 
 app.post('/add-vote', function(req, res) {
 	usersVotes[req.param('userId', null)] = req.param('vote', null);
-	console.log(io.sockets.clients().length);
-	if (io.sockets.clients().length == Object.keys(usersVotes).length) {
-		res.render('results.jade', {locals: { usersVotes: usersVotes}});
-	}
 	res.render('voting-in-progress.jade');
 });
 
 app.post('/start-vote', function(req, res){
 	res.render('vote-started.jade');
 });
+
 io.sockets.on('connection', function (socket) {
+  
   socket.on('voteStarted', function() {
-	socket.broadcast.emit('gameStarted', { hello: 'world' });
+	socket.broadcast.emit('gameStarted', {});
+  });
+  
+  socket.on('voteEntered', function() {
+	if (count == Object.keys(usersVotes).length) {
+		io.sockets.emit('gameEnded', {usersVotes: usersVotes});
+	}
   });
 });
 
