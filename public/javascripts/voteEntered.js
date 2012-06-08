@@ -13,4 +13,7 @@ socket.on('gameEnded', function (data) {
 		resultsList.appendChild(vote);
 	}
 	
+	var voteInProgress = document.getElementById("voteInProgress");
+	voteInProgress.style.visibility = "hidden";
+	
 });

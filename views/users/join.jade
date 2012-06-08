@@ -2,8 +2,12 @@ html
 	head
 	body
 		form(action='/join', method='post') 
-			label Name:
-			input(type='text', name='name') 
-			label Email:
-			input(type='text', name='email') 
-			input(type='submit')
+			ul
+				li
+					label Name 
+					input(type='text', name='name') 
+				li
+					label Email
+					input(type='text', name='email')
+				li
+					input(type='submit')
